@@ -1,0 +1,182 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.root{
+    -fx-background-color: #262626;
+}
+/* 
+.table-view{
+   -fx-background-color: transparent;
+}*/
+
+ .tree-cell, 
+  .tree-cell .virtual-flow{
+    -fx-text-fill: white;
+      -fx-background-color: #262626;
+	-fx-padding: 3;
+   }
+    
+.table-view,
+.table-view:focused{
+    -fx-background-color: #262626;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: linear-gradient(#131313 0%, #424141 100%);
+}
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+.table-view,
+.table-view .column-header,
+.table-view .filler  {
+    -fx-background-color: transparent;
+
+}
+
+.table-view .table-cell{
+    -fx-text-fill: white;
+      -fx-border-width: 0;
+    /*-fx-border-width: 0px;*/
+}
+
+.table-row-cell{
+	
+    -fx-background-color: -fx-table-cell-border-color, #616161;
+    -fx-background-insets: 0, 0 0 0 0;/* 0, 0 0 1 0*/
+    
+    -fx-padding: 0.0em; /* 0 */
+    
+    
+}
+
+.table-row-cell:odd{
+    -fx-background-color: -fx-table-cell-border-color, #424242;
+}
+
+
+.table-row-cell:selected  {
+    -fx-background-color: #005797;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+    
+   /*  -fx-selection-bar:#005797;
+    -fx-selection-bar-non-focused:#005797;*/
+}
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-focus-color;
+}
+
+.text-field {
+-fx-background-color: 
+        #090a0c,
+        linear-gradient(#191d22 0%, #1f2429 80%, #38424b 100%),
+        linear-gradient(#20262b, #191d22),
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-font-family: "Arial";
+    -fx-text-fill: linear-gradient(white, #d0d0d0);
+    -fx-font-size: 12px;
+    -fx-padding: 2 3 2 3;
+}
+
+
+.button {
+-fx-background-color: 
+        #090a0c,
+        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
+        linear-gradient(#20262b, #191d22),
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-font-family: "Arial";
+    -fx-text-fill: linear-gradient(white, #d0d0d0);
+    -fx-font-size: 12px;
+    -fx-padding: 4 10 4 10;
+}
+.button:hover
+{
+	-fx-background-color: 
+        #090a0c,
+        linear-gradient(#48525b 0%, #2f3439 20%, #494d52 100%),
+        linear-gradient(#20262b, #191d22),
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+}
+.button:pressed
+{
+  /*-fx-padding: 10 15 13 15;*/
+    -fx-background-insets: 2 0 0 0,2 0 3 0, 2 0 4 0, 2 0 5 0;
+}
+
+
+
+.button Text {
+    -fx-effect: dropshadow( one-pass-box , rgba(0,0,0,0.9) , 1, 0.0 , 0 , 1 );
+}
+
+.split-pane
+{
+   
+   -fx-background-color: transparent;
+   
+    /*-fx-background-color: linear-gradient(#48525b 0%, #2f3439 20%, #494d52 100%);*/
+   -fx-background-insets: 0;
+
+   -fx-box-border: transparent;
+}
+.split-pane> *.split-pane-divider
+{
+	 -fx-padding: 0 2 0 2;
+	 -fx-background-color: linear-gradient(#48525b 0%, #2f3439 20%, #494d52 100%);
+}
+
+
+
+.table-view > .virtual-flow > .scroll-bar:vertical,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track-background, 
+.table-view > .virtual-flow > .scroll-bar:horizontal,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track-background {
+    -fx-background-color: transparent;
+}
+
+.table-view > .virtual-flow > .scroll-bar > .increment-button, 
+.table-view > .virtual-flow > .scroll-bar > .decrement-button {
+    -fx-opacity: 0;
+}
+
+
+
+
+.FilenameEditTextField{
+	
+	
+}
+.img_file{
+	/*-fx-background-image: url("background.jpg");*/
+	/*-fx-size: 30px,30px;*/
+	-fx-image: url("file.png");
+}
+.img_folder{
+	/*-fx-background-image: url("background.jpg");*/
+	/*-fx-size: 30px,30px;*/
+	-fx-image: url("folder.png");
+}
+.img_folder_open{
+	/*-fx-background-image: url("background.jpg");*/
+	/*-fx-size: 30px,30px;*/
+	-fx-image: url("folder_open.png");
+}
+.img_loading{
+	/*-fx-background-image: url("background.jpg");*/
+	/*-fx-size: 30px,30px;*/
+	-fx-image: url("loading.gif");
+
+}

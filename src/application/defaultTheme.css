@@ -1,0 +1,30 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+
+
+
+.FilenameEditTextField{
+	
+	
+}
+.img_file{
+	/*-fx-background-image: url("background.jpg");*/
+	/*-fx-size: 30px,30px;*/
+	-fx-image: url("file.png");
+}
+.img_folder{
+	/*-fx-background-image: url("background.jpg");*/
+	/*-fx-size: 30px,30px;*/
+	-fx-image: url("folder.png");
+}
+.img_folder_open{
+	/*-fx-background-image: url("background.jpg");*/
+	/*-fx-size: 30px,30px;*/
+	-fx-image: url("folder_open.png");
+}
+.img_loading{
+	/*-fx-background-image: url("background.jpg");*/
+	/*-fx-size: 30px,30px;*/
+	-fx-image: url("loading.gif");
+
+}
