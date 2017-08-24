@@ -161,6 +161,17 @@
     -fx-background-color: transparent;
 }
 
+.tree-view > .virtual-flow > .scroll-bar:vertical,
+.tree-view > .virtual-flow > .scroll-bar:vertical > .track,
+.tree-view > .virtual-flow > .scroll-bar:vertical > .track-background, 
+.tree-view > .virtual-flow > .scroll-bar:horizontal,
+.tree-view > .virtual-flow > .scroll-bar:horizontal > .track,
+.tree-view > .virtual-flow > .scroll-bar:horizontal > .track-background {
+    -fx-background-color: #464646;
+}
+
+.tree-view > .virtual-flow > .scroll-bar > .increment-button, 
+.tree-view > .virtual-flow > .scroll-bar > .decrement-button ,
 .table-view > .virtual-flow > .scroll-bar > .increment-button, 
 .table-view > .virtual-flow > .scroll-bar > .decrement-button {
     -fx-opacity: 0;

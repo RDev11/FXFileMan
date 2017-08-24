@@ -27,6 +27,12 @@ public class FileTableView extends TableView<FileInfo> {
 	static DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy  HH:mm");
 	private Main frameRef;
 	
+	TableColumn<FileInfo, TypeOfFile> typeColumn;
+	TableColumn<FileInfo, String> fileNameColumn;
+	TableColumn<FileInfo, Long> sizeColumn;
+	TableColumn<FileInfo, Date> lastModifiedColumn;
+	
+	
 	@SuppressWarnings("unchecked")
 	public FileTableView(Main frameRef)	{
 		this.frameRef=frameRef;
@@ -70,11 +76,11 @@ public class FileTableView extends TableView<FileInfo> {
       	     }
       };//end-fileTypeCellFactory
       
-		TableColumn<FileInfo, TypeOfFile> typeCol = new TableColumn<FileInfo, TypeOfFile>("");
-	    typeCol.setCellValueFactory(new PropertyValueFactory<FileInfo, TypeOfFile>("ftype"));
-	    typeCol.setCellFactory(fileTypeCellFactory);
-	    typeCol.setPrefWidth(22);
-	    typeCol.setComparator((s1,s2)->{//set comparator for sorting so folders goes first and files goes last
+		typeColumn = new TableColumn<FileInfo, TypeOfFile>("");
+	    typeColumn.setCellValueFactory(new PropertyValueFactory<FileInfo, TypeOfFile>("ftype"));
+	    typeColumn.setCellFactory(fileTypeCellFactory);
+	    typeColumn.setPrefWidth(22);
+	    typeColumn.setComparator((s1,s2)->{//set comparator for sorting so folders go first and files - last
 	    	if(s1==null||s2==null)return 0;
 	    	if(s1.isParentDir())return 1;
 	    	if(s2.isParentDir())return -1;
@@ -92,11 +98,11 @@ public class FileTableView extends TableView<FileInfo> {
 	             };
 	                
       
-      TableColumn<FileInfo, String> fileNameCol = new TableColumn<FileInfo, String>("First Name");
-      fileNameCol.setCellValueFactory(new PropertyValueFactory<FileInfo, String>("fname"));
-      fileNameCol.setCellFactory(fileNameCellFactory);
+	  fileNameColumn = new TableColumn<FileInfo, String>("First Name");
+      fileNameColumn.setCellValueFactory(new PropertyValueFactory<FileInfo, String>("fname"));
+      fileNameColumn.setCellFactory(fileNameCellFactory);
 		
-      fileNameCol.setOnEditCommit(new EventHandler<CellEditEvent<FileInfo, String>>()
+      fileNameColumn.setOnEditCommit(new EventHandler<CellEditEvent<FileInfo, String>>()
 		{
 			@Override
 	        public void handle(CellEditEvent<FileInfo, String> t) {
@@ -124,7 +130,7 @@ public class FileTableView extends TableView<FileInfo> {
 				
 			}
 		});
-      fileNameCol.setEditable(true);
+      fileNameColumn.setEditable(true);
 		addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
            @Override
            public void handle(KeyEvent event) {
@@ -148,9 +154,9 @@ public class FileTableView extends TableView<FileInfo> {
        });
 
 	    /////////////////////////////////////////////////////////////////////////////////////////////size Column
-	    TableColumn<FileInfo, Long> sizeCol =  new TableColumn<FileInfo, Long>("Size");	
+	    sizeColumn =  new TableColumn<FileInfo, Long>("Size");	
 	    
-	    sizeCol.setCellFactory((p)->{
+	    sizeColumn.setCellFactory((p)->{
 	    	return new TableCell<FileInfo, Long>(){
 	    		{
 	    			setAlignment(Pos.CENTER_RIGHT);
@@ -199,7 +205,7 @@ public class FileTableView extends TableView<FileInfo> {
 	    	};
 	    });
 
-	    sizeCol.setCellValueFactory(
+	    sizeColumn.setCellValueFactory(
 		    	(row)->{
 			    	//SimpleIntegerProperty property=new SimpleIntegerProperty();		
 			    	FileInfo info = row.getValue();
@@ -212,7 +218,7 @@ public class FileTableView extends TableView<FileInfo> {
 		);
 
 	    /////////////////////////////////////////////////////////////////////////////////////////////lastModified Column
-	    TableColumn<FileInfo, Date> lastModifiedColumn =  new TableColumn<FileInfo, Date>("Modified");
+	    lastModifiedColumn =  new TableColumn<FileInfo, Date>("Modified");
 	    lastModifiedColumn.setCellFactory((p)->{
 	    	return new TableCell<FileInfo, Date>(){
 	    		{
@@ -228,18 +234,10 @@ public class FileTableView extends TableView<FileInfo> {
 	    		}
 	    	};
 	    });
-	    /*
-	    lastModifiedColumn.setCellValueFactory(
-	    	(row)->{
-		    	SimpleStringProperty property=new SimpleStringProperty();		    	
-		        property.setValue(dateFormat.format(row.getValue().getFLastModefied()));
-		    	return property;
-	    	}
-	    );*/
+
 
 	    lastModifiedColumn.setCellValueFactory(
 		    	(row)->{
-			    	//SimpleIntegerProperty property=new SimpleIntegerProperty();		
 			    	FileInfo info = row.getValue();
 			    	//if(!info.getFtype().isFolder())
 			    	//{
@@ -250,20 +248,25 @@ public class FileTableView extends TableView<FileInfo> {
 		);
 	    
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	    getColumns().addAll(typeCol, fileNameCol, lastModifiedColumn,sizeCol);
+	    
+	    
+	    getColumns().addAll(typeColumn, fileNameColumn, lastModifiedColumn,sizeColumn);
 
 	    
-		getSortOrder().addListener(new ListChangeListener<TableColumn<FileInfo, ?>>() {//folders always go first
+		getSortOrder().addListener(new ListChangeListener<TableColumn<FileInfo, ?>>() {//always sort by typeColumn
 	        @Override
 	        public void onChanged(Change<? extends TableColumn<FileInfo, ?>> change) {
 	        	ObservableList<TableColumn<FileInfo, ?>> sortOrder = FileTableView.this.getSortOrder();
-	        	if(sortOrder.size()==0||FileTableView.this.getSortOrder().get(0)!=typeCol)
+	        	if(sortOrder.size()==0||FileTableView.this.getSortOrder().get(0) != typeColumn)
 	        	{
-	        		FileTableView.this.getSortOrder().add(0, typeCol);
+	        		FileTableView.this.getSortOrder().add(0, typeColumn);
 	        	}
 	        }
 	    });
 
+		ImageView placeholder = new ImageView();
+		placeholder.getStyleClass().add("img_loading");
+		this.setPlaceholder(placeholder);
 	    
 	}
 	public void createNewFile()
@@ -274,7 +277,7 @@ public class FileTableView extends TableView<FileInfo> {
     	FileInfo newFile =FileInfo.blankFileInfo(frameRef.getCurrentDir());	          	
         	getItems().add(newFile);
 
-    	int row = getItems().size() -1;
+    	int row = getItems().size() - 1;
 	    //getSelectionModel().clearAndSelect( row, getColumns().get(1));//filename column   
         // scroll to new row
         scrollTo( newFile );
@@ -286,7 +289,7 @@ public class FileTableView extends TableView<FileInfo> {
 			e.printStackTrace();
 		}
         Platform.runLater(()->{
-            edit(row, getColumns().get(1)); //filename column       
+            edit(row, fileNameColumn); //filename column       
          });
 	}
 }

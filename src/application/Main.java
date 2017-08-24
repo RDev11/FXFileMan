@@ -4,11 +4,11 @@ import java.io.File;
 
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
@@ -56,12 +56,7 @@ public class Main extends Application {
 			
 			table = new FileTableView(this);	    
 		    	
-		    FileTreeView fileTreeView = new FileTreeView(new Callback<File,File>(){
-				@Override
-				public File call(File param) {					
-					return openDirectory(param);
-				}		    	
-		    });
+		    FileTreeView fileTreeView = new FileTreeView(this);
 		   
 		    SplitPane splitPane=new SplitPane();
 		    splitPane.getItems().addAll(fileTreeView,table);
@@ -71,7 +66,7 @@ public class Main extends Application {
 		    mframe.setCenter(splitPane);
 		    
 		    
-		    
+	
 		    
 		    currentDir_textField = new TextField();
 		   
@@ -82,7 +77,7 @@ public class Main extends Application {
 		        {
 		            if (ke.getCode().equals(KeyCode.ENTER))
 		            {
-		            	openDirectory(new File(currentDir_textField.getText())).getAbsolutePath();
+		            	openDirectory(new File(currentDir_textField.getText()));
 		            	currentDir_textField.selectEnd();
 		            }
 		        }
@@ -163,52 +158,59 @@ public class Main extends Application {
 		openDirectory(currentDir.getParentFile());
 		
 	}
-	public File openDirectory(File path)
+	public void openDirectory(File path)
 	{
 
 		if(path==null||!path.isDirectory())
 		{
 			currentDir_textField.setText(currentDir.getAbsolutePath());
-			return currentDir;
+			return;
 		}
-
-		ObservableList<FileInfo> oar = FXCollections.observableArrayList();
-		
-
-		currentDir_textField.setText(path.getAbsolutePath());
 		currentDir=path;
 		
-		File parentDir=currentDir.getParentFile();
-		if (parentDir!=null)
-			oar.add(new FileInfo(parentDir, true));
-
-
-		if(currentDir.isDirectory()&&currentDir.canRead())
-		{
-			if(currentDir.listFiles()!=null)
+		
+		
+		ObservableList<FileInfo> oar = FXCollections.observableArrayList();
+		table.setItems(null);
+		
+		Thread loader=new Thread(()->{
+			
+			File parentDir=currentDir.getParentFile();
+			if (parentDir!=null)
+				oar.add(new FileInfo(parentDir, true));
+			
+			
+			if(currentDir.isDirectory()&&currentDir.canRead())
 			{
-				//if(currentDir.listFiles().length==0)
-				//	System.err.println("opendir-len=0");
-				for (File f : currentDir.listFiles())
-				{						
-					//if(!f.isHidden()||showHidden)
-					oar.add(new FileInfo(f, false));
-				}		
+				if(currentDir.listFiles()!=null)
+				{
+					//if(currentDir.listFiles().length==0)
+					//	System.err.println("opendir-len=0");
+					for (File f : currentDir.listFiles())
+					{						
+						//if(!f.isHidden()||showHidden)
+						oar.add(new FileInfo(f, false));
+					}		
+				}
 			}
-		}
-		
-	
-		table.setItems(oar);
-		
-		table.getColumns().get(0).setSortType(TableColumn.SortType.DESCENDING);
-		table.getSortOrder().add(table.getColumns().get(0));			
-
-		
-
-
-		return currentDir;
-		
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Platform.runLater(()->{
+				currentDir_textField.setText(path.getAbsolutePath());
+				table.setItems(oar);
+				
+				table.getColumns().get(0).setSortType(TableColumn.SortType.DESCENDING);
+				table.getSortOrder().add(table.getColumns().get(0));					
+			});
+			
+		});
+		loader.start();
 	}
+	
 	public File getCurrentDir()
 	{
 		return currentDir;	
