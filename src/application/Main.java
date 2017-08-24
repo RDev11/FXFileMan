@@ -4,12 +4,9 @@ import java.io.File;
 
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.scene.Scene;
@@ -17,6 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -38,53 +37,41 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			primaryStage.setTitle("qwerty");
-			
+			primaryStage.setTitle("FXFileMan");
+
 
 			BorderPane  mframe= new BorderPane ();
 
-			Scene scene = new Scene(mframe,600,400);
+			Scene scene = new Scene(mframe,800,500);
 			
 			darkThemeStyle=getClass().getResource("darkTheme.css").toExternalForm();
 			defaultThemeStyle=getClass().getResource("defaultTheme.css").toExternalForm();
 
 			scene.getStylesheets().add(darkThemeStyle);
-			
-			
-			
-			
+
 			primaryStage.setScene(scene);
 			
 				
-			table= new FileTableView(this);
-
-		   
-		    
-
-		    SplitPane splitPane=new SplitPane();
-		    
-		    
-		    
-		    
+			
+			
+			table = new FileTableView(this);	    
+		    	
 		    FileTreeView fileTreeView = new FileTreeView(new Callback<File,File>(){
 				@Override
-				public File call(File param) {
-					
+				public File call(File param) {					
 					return openDirectory(param);
 				}		    	
 		    });
 		   
-
-
+		    SplitPane splitPane=new SplitPane();
 		    splitPane.getItems().addAll(fileTreeView,table);
 		  
 		    SplitPane.setResizableWithParent(fileTreeView, false);
 		    splitPane.setDividerPositions(0.3,1);
-
+		    mframe.setCenter(splitPane);
 		    
-		    //splitPane.getDividerPositions()[0]
 		    
-		   // mframe.setRight(table);
+		    
 		    
 		    currentDir_textField = new TextField();
 		   
@@ -103,50 +90,26 @@ public class Main extends Application {
 		    
 
 		    
+		    
+		    
+		    
 
-		    HBox hbox_buttons=new HBox();
-		    Button newFolderButton = new Button("N");
+		    Button newFolderButton = new Button();
 		    newFolderButton.setFocusTraversable(false);
 		    newFolderButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 	            @Override
-	            public void handle(MouseEvent mouseEvent) {
-
-	            	int row = table.getItems().size() ;
-
-      	          	System.out.println(1);
-	            	FileInfo newFile =FileInfo.blankFileInfo(currentDir);
-      	          	System.out.println(2);
-	            	//FileInfo newFile = new FileInfo(
-	            	//		new File(currentDir.getPath()+File.separator+"New folder"),false);
-      	           	          	
-      	          	table.getItems().add(newFile);
-      	          	System.out.println(3);
-	    		    //table.requestFocus();
-	    		   // table.
-	            	 //table.getSelectionModel().clearAndSelect(arg0);
-				    table.getSelectionModel().clearAndSelect( row, table.getColumns().get(1));
-      	          	System.out.println(4);
-			        // scroll to new row
-			        table.scrollTo( newFile );
-      	          	System.out.println(5);
-
-
-			        
-			        try {//
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-			        Platform.runLater(new Runnable() {
-		                @Override
-		                public void run() {
-		                	table.edit(row, table.getColumns().get(1));
-		                }
-		             });
+	            public void handle(MouseEvent mouseEvent) {       	
+      	          	table.createNewFile();
 	            }
 	        });
+		    newFolderButton.setTooltip(new Tooltip("Создать папку"));
+		    newFolderButton.setGraphic( new ImageView());
+		    //newFolderButton.setId("img_newFolder");
+		    newFolderButton.getGraphic().setId("img_newFolder");
 		    
-		    Button changeThemeButton = new Button("C");
+		    
+		    
+		    Button changeThemeButton = new Button();
 		    changeThemeButton.setFocusTraversable(false);
 		    changeThemeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 	            @Override
@@ -155,26 +118,43 @@ public class Main extends Application {
 	            	if(!scene.getStylesheets().contains(darkThemeStyle))
 	            		scene.getStylesheets().setAll(darkThemeStyle);
 	            	else
-	            		scene.getStylesheets().setAll(defaultThemeStyle);
-	            	
+	            		scene.getStylesheets().setAll(defaultThemeStyle);          	
 	            }
 	        });
+		    changeThemeButton.setTooltip(new Tooltip("Изменить тему"));
+		    changeThemeButton.setGraphic( new ImageView());
+		    changeThemeButton.getGraphic().setId("img_changeTheme");
+		    
+
 
 		    
 		    
-		    hbox_buttons.getChildren().addAll(newFolderButton,changeThemeButton,new Button("2"),new Button("3"));
+
+		    HBox hbox_buttons=new HBox();
+		    hbox_buttons.getChildren().addAll(newFolderButton,changeThemeButton);
 		    VBox vbox_top=new VBox();
 		    vbox_top.getChildren().addAll(hbox_buttons,currentDir_textField);
-		    mframe.setCenter(splitPane);
+		    
+		    
+		    
+  
+		    
 		    mframe.setTop(vbox_top);
 
 
-		    openDirectory(new File("G:\\tests"));
-		    
-		    
+
+		    for (File f:  File.listRoots())
+		    {
+		    	if(f.isDirectory())
+		    	{
+		    		openDirectory(f);
+		    		break;
+		    	}
+		    }
 		    
 			primaryStage.show();
 		} catch(Exception e) {
+			System.err.println("in Main.start():");			
 			e.printStackTrace();
 		}
 	}
@@ -185,50 +165,53 @@ public class Main extends Application {
 	}
 	public File openDirectory(File path)
 	{
-		System.out.println("opendir-1");
+
 		if(path==null||!path.isDirectory())
 		{
 			currentDir_textField.setText(currentDir.getAbsolutePath());
 			return currentDir;
 		}
-		//ObservableList<FileInfo> oar=FXCollections.observableArrayList();
-		ObservableList<FileInfo> oar=FXCollections.observableArrayList();
+
+		ObservableList<FileInfo> oar = FXCollections.observableArrayList();
 		
-		System.out.println("opendir-2");
+
 		currentDir_textField.setText(path.getAbsolutePath());
 		currentDir=path;
 		
 		File parentDir=currentDir.getParentFile();
 		if (parentDir!=null)
 			oar.add(new FileInfo(parentDir, true));
-		System.out.println("opendir-3");
+
+
 		if(currentDir.isDirectory()&&currentDir.canRead())
 		{
 			if(currentDir.listFiles()!=null)
 			{
-				if(currentDir.listFiles().length==0)
-					System.err.println("opendir-len=0");
+				//if(currentDir.listFiles().length==0)
+				//	System.err.println("opendir-len=0");
 				for (File f : currentDir.listFiles())
 				{						
+					//if(!f.isHidden()||showHidden)
 					oar.add(new FileInfo(f, false));
-				}
-			
+				}		
 			}
 		}
-
 		
-		System.out.println("opendir-5");
+	
 		table.setItems(oar);
-		System.out.println("ItemsSet");
-		
-		
 		
 		table.getColumns().get(0).setSortType(TableColumn.SortType.DESCENDING);
-		table.getSortOrder().add(table.getColumns().get(0));
+		table.getSortOrder().add(table.getColumns().get(0));			
+
+		
 
 
 		return currentDir;
 		
+	}
+	public File getCurrentDir()
+	{
+		return currentDir;	
 	}
 	public static void main(String[] args) {
 		launch(args);

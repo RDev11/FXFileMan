@@ -14,7 +14,21 @@
       -fx-background-color: #262626;
 	-fx-padding: 3;
    }
-    
+ .tree-cell:selected{
+ 	-fx-background-color: -fx-focus-color;
+ }
+.tree-cell > .tree-disclosure-node > .arrow  {
+    -fx-background-color: white;
+}
+.tree-cell:expanded > .tree-disclosure-node > .arrow {
+    -fx-background-color: white;
+}
+
+
+
+ 
+ 
+     
 .table-view,
 .table-view:focused{
     -fx-background-color: #262626;
@@ -180,3 +194,10 @@
 	-fx-image: url("loading.gif");
 
 }
+#img_newFolder{
+	-fx-image: url("action_add.png");
+}
+#img_changeTheme{
+	-fx-image: url("application.png");
+}
+

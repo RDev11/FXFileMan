@@ -50,7 +50,7 @@ public class EditingCell extends TableCell<FileInfo, String> {
                  	}
                  		
                  	
-                     System.out.println("Cell text: (" + fi +") _ "+event.getClickCount());
+                     //System.out.println("Cell text: (" + fi +") _ "+event.getClickCount());
                     // event.consume();
                      
                      //cancelEdit();
@@ -62,7 +62,7 @@ public class EditingCell extends TableCell<FileInfo, String> {
 
     @Override
     public void startEdit() {
-    	 System.out.println("startEdit ");
+    	 //System.out.println("startEdit ");
         if (!isEmpty()) {
         	if(getString().equals("..")||!isEditable())
              	return;
@@ -100,9 +100,9 @@ public class EditingCell extends TableCell<FileInfo, String> {
 
        // super.cancelEdit();
 
-        System.out.println("cancelEdit ("+fi+") "+isEditing());
         if(isEditing())
         {
+            //System.out.println("cancelEdit ("+fi+") "+isEditing());
         	super.cancelEdit();
         	if(fi!=null&&fi.isNewFile())
         	{
@@ -129,7 +129,7 @@ public class EditingCell extends TableCell<FileInfo, String> {
                 }
                 setText(null);
                 setGraphic(textField);
-                System.out.println("editing "+item);//why ?
+                //System.out.println("editing "+item);//why ?
             } else {
             	//System.out.println("update  "+item);//why ?
                 setText(getString());

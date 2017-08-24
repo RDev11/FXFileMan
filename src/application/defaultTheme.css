@@ -28,3 +28,9 @@
 	-fx-image: url("loading.gif");
 
 }
+#img_newFolder{
+	-fx-image: url("action_add.png");
+}
+#img_changeTheme{
+	-fx-image: url("application.png");
+}
